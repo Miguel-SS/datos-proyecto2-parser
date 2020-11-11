@@ -1,12 +1,13 @@
 import re
 
+
 def tokenizer(string: str):
     token_rexes = [
-        re.compile(r"[a-zA-Z_][a-zA-Z0-9_]*"),  # variables
-        re.compile(r"[0-9]+"),  # integers
-        re.compile(r"[+*/-]"),  # operators
-        re.compile(r"[()]"),  # parentheses
-        re.compile(r"[=]")  # assignment
+        (re.compile(r"^[a-zA-Z_][a-zA-Z0-9_]*"), "identifier"),  # variables
+        (re.compile(r"^[0-9]+"), "number"),  # integers
+        (re.compile(r"^[+*/-]"), "operator"),  # operators
+        (re.compile(r"^[()]"), "parentheses"),  # parentheses
+        (re.compile(r"^="), "assignment")  # assignment
     ]
 
     tokens = []
@@ -14,9 +15,18 @@ def tokenizer(string: str):
     while len(string):
         string = string.lstrip()
 
-        for token_rex in token_rexes:
+        matched = False
+
+        for token_rex, token_type in token_rexes:
             mo = token_rex.match(string)
             if mo:
-                token = mo.group(0)
+                matched = True
+                token = (mo.group(0), token_type)
                 tokens.append(token)
-                string = token_rex
+                string = token_rex.sub('', string)
+                break
+
+        if not matched:
+            raise Exception("Invalid String")
+
+    return tokens
