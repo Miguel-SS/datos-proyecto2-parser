@@ -26,13 +26,23 @@
 # (1 + (2 - 3) * 4 / 5)
 
 
-from mini_parser.symbol_table import SymbolTable
+# from mini_parser.symbol_table import SymbolTable
+#
+# SymbolTable.add_symbol("a", 10)
+# SymbolTable.add_symbol("b", 40)
+# SymbolTable.add_symbol("c", 139)
+# SymbolTable.add_symbol("a", 2)
+#
+# print(SymbolTable.find_symbol("r"))
+#
+# print(SymbolTable.symbols)
 
-SymbolTable.add_symbol("a", 10)
-SymbolTable.add_symbol("b", 40)
-SymbolTable.add_symbol("c", 139)
-SymbolTable.add_symbol("a", 2)
 
-print(SymbolTable.find_symbol("r"))
+fic = open('miau.txt', "r")
+lines = []
 
-print(SymbolTable.symbols)
+for line in fic:
+    lines.append(line)
+
+
+print(lines[4])
