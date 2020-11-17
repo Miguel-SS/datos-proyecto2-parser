@@ -26,7 +26,6 @@ while True:
 # (1 + (2 - 3) * 4 / 5)
 # (1 + (2 - 3) * 4 / 5) + "abc"
 
-
 # from mini_parser.symbol_table import SymbolTable
 #
 # SymbolTable.add_symbol("a", 10)
@@ -37,3 +36,13 @@ while True:
 # print(SymbolTable.find_symbol("r"))
 #
 # print(SymbolTable.symbols)
+
+
+fic = open('miau.txt', "r")
+lines = []
+
+for line in fic:
+    lines.append(line)
+
+
+print(lines[4])
