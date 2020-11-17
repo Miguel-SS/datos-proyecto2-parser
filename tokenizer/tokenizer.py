@@ -3,10 +3,10 @@ import re
 
 def tokenizer(string: str):
     token_rexes = [
-        (re.compile(r"^[a-zA-Z_][a-zA-Z0-9_]*"), "identifier"),  # variables
-        (re.compile(r"^[0-9]+"), "number"),  # integers
-        (re.compile(r"^[0-9].[0-9]"), "decimal"),  # floats
-        (re.compile(r'^"[a-zA-Z_][a-zA-Z0-9_]"'), "word"),  # strings
+        (re.compile(r"^[a-zA-Z_]\w*"), "identifier"),  # variables
+        (re.compile(r"^\d+"), "number"),  # integers
+        (re.compile(r"^\d[.]\d*"), "decimal"),  # floats
+        (re.compile(r'^"[a-zA-Z_]\w*"'), "word"),  # strings
         (re.compile(r"^[+*/-]"), "operator"),  # operators
         (re.compile(r"^[()]"), "parentheses"),  # parentheses
         (re.compile(r"^[{}]"), "braces"),  # braces
