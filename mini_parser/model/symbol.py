@@ -1,11 +1,11 @@
 
 
 class Symbol:
-    type = " "
-    name = " "
-    value = object
-    line = int
-    field = " "
+    # type = " "
+    # name = " "
+    # value = object
+    # line = int
+    # field = " "
 
     def __init__(self, type_, name_, value_, line_, field_):
         self.type = type_
@@ -21,7 +21,7 @@ class Symbol:
         return self.name
 
     def get_value(self):
-        return  self.value
+        return self.value
 
     def get_line(self):
         return self.line
