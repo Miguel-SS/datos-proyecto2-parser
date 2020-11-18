@@ -1,22 +1,32 @@
 
 from tokenizer import tokenizer
-# import mini_parser
+from mini_parser import *
 
 print("Mini Interpreter\n")
 
-while True:
-    try:
+tokens = tokenizer("int x")
+line_parser(tokens)
 
-        input_ = input(">> ")
+tokens = tokenizer("int x = 40")
+line_parser(tokens)
 
-        # tokenize
-        tokens = tokenizer(input_)
+tokens = tokenizer('x = "dfv"')
+line_parser(tokens)
 
-        # parse
 
-        print("Tokens: ", tokens)
-    except KeyboardInterrupt:
-        exit()
+# while True:
+#     try:
+#
+#         input_ = input(">> ")
+#
+#         # tokenize
+#         tokens = tokenizer(input_)
+#
+#         # parse
+#
+#         print("Tokens: ", tokens)
+#     except KeyboardInterrupt:
+#         exit()
 
 
 # Tests:
@@ -38,11 +48,11 @@ while True:
 # print(SymbolTable.symbols)
 
 
-fic = open('miau.txt', "r")
-lines = []
-
-for line in fic:
-    lines.append(line)
-
-
-print(lines[4])
+# fic = open('miau.txt', "r")
+# lines = []
+#
+# for line in fic:
+#     lines.append(line)
+#
+#
+# print(lines)

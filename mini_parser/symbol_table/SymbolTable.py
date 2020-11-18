@@ -16,3 +16,5 @@ class SymbolTable:
             if key == name:
                 return SymbolTable.symbols[key]
         raise Exception("Nombre no definido")
+
+
