@@ -29,8 +29,15 @@ def parse_assign_declaration(tokens: list):
 
 
 def parse_function(tokens: list):
-
-    pass
+    i = 3
+    while tokens[i][0] != '{':
+        token = [tokens[i], tokens[i+1]]
+        parse_declaration(token)
+        if tokens[i+2][0] == ')':
+            break
+        elif tokens[i+2][0] == ',':
+            i = i+1
+        i = i+2
 
 
 def parse_conditional(tokens: list):
@@ -43,7 +50,7 @@ def line_parser(tokens: list):
         if (tokens[0][0] == 'void') or (tokens[0][0] == 'string') or (tokens[0][0] == 'int') or (tokens[0][0] == 'float'):
             if len(tokens) < 3:
                 parse_declaration(tokens)
-            elif tokens[2][1] == '(':
+            elif tokens[2][0] == '(':
                 parse_function(tokens)
             else:
                 parse_assign_declaration(tokens)
@@ -54,7 +61,6 @@ def line_parser(tokens: list):
                 parse_assignment(tokens)
     else:
         print('ERROR')
-
 
 
 def mini_parser(lines: list):

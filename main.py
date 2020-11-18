@@ -4,14 +4,14 @@ from mini_parser import *
 
 print("Mini Interpreter\n")
 
-tokens = tokenizer("int x")
+tokens = tokenizer("void function (int x, string c, int y) {")
 line_parser(tokens)
 
-tokens = tokenizer("int x = 40")
-line_parser(tokens)
-
-tokens = tokenizer('x = "dfv"')
-line_parser(tokens)
+# tokens = tokenizer("int x = 40")
+# line_parser(tokens)
+#
+# tokens = tokenizer('x = "dfv"')
+# line_parser(tokens)
 
 
 # while True:
