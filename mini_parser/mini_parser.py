@@ -15,29 +15,36 @@ def parse_assignment(tokens: list):
         SymbolTable.add_symbol(name, value)
         print(SymbolTable.symbols)
     else:
-        print("Tipo de dato no coincide")
+        print('Error linea x: "' + name + '" parametro incorrecto - se esperaba (' + value[1] + ')')
 
 
 def parse_assign_declaration(tokens: list):
+    name = tokens[1][0]
+    value = tokens[3]
     if tokens[0][0] == tokens[3][1]:
-        name = tokens[1][0]
-        value = tokens[3]
         SymbolTable.add_symbol(name, value)
         print(SymbolTable.symbols)
     else:
-        print("Tipo de dato no coincide con la declaracion")
+        print('Error linea x: "' + name + '" parametro incorrecto - se esperaba (' + value[1] + ')')
 
 
 def parse_function(tokens: list):
     i = 3
-    while tokens[i][0] != '{':
+    while tokens[i][0] != ')':
         token = [tokens[i], tokens[i+1]]
         parse_declaration(token)
-        if tokens[i+2][0] == ')':
-            break
-        elif tokens[i+2][0] == ',':
+        # if tokens[i+2][0] == ')':
+        #     break
+        if tokens[i+2][0] == ',':
             i = i+1
         i = i+2
+    
+
+
+def parse_body(lines: list):
+    for line in lines:
+        if line[0][0] == '}':
+            break
 
 
 def parse_conditional(tokens: list):
