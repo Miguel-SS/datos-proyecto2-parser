@@ -49,17 +49,17 @@ def parse_assign_declaration(tokens: list):
 
 def parse_function(tokens: list):
     i = 3
+    name = tokens[1][0]
+    value = Symbol(tokens[0][0], name, None, line_counter, scopes_stack[-1])
+    SymbolTable.add_symbol(name, value)
     scopes_stack.append('local_' + tokens[1][0])
     while tokens[i][0] != ')':
         token = [tokens[i], tokens[i+1]]
         parse_declaration(token)
+        value.get_parameters().append(SymbolTable.find_symbol(token[1][0]))
         if tokens[i+2][0] == ',':
             i = i+1
         i = i+2
-
-    name = tokens[1][0]
-    value = Symbol(tokens[0][0], name, None, line_counter, 'global')
-    SymbolTable.add_symbol(name, value)
 
 
 def parse_return(tokens: list):
@@ -109,7 +109,24 @@ def parse_conditional(tokens: list):
 
 
 def call_function(tokens: list):
-    pass
+    function = SymbolTable.find_symbol(tokens[0][0])
+    if function is not None:
+        i = 2
+        param = None
+        for parameter in function.get_parameters():
+            if tokens[i][1] == 'identifier':
+                param = SymbolTable.find_symbol(tokens[i][0]).get_type()
+            elif (tokens[i][1] == 'float') or (tokens[i][1] == 'string') or (tokens[i][1] == 'int'):
+                param = tokens[i][1]
+
+            if parameter.get_type() != param:
+                error = 'Error linea ' + str(line_counter) + ': "' + function.get_name() + \
+                        '" parametro incorrecto - se esperaba (' + parameter.get_type() + ')'
+                errors_list.append(error)
+
+    else:
+        error = 'Error linea ' + str(line_counter) + ': ' + tokens[0][0] + 'no esta definido'
+        errors_list.append(error)
 
 
 def line_parser(tokens: list):

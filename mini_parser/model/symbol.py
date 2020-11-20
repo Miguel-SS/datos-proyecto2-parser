@@ -1,11 +1,6 @@
 
 
 class Symbol:
-    # type = " "
-    # name = " "
-    # value = object
-    # line = int
-    # field = " "
 
     def __init__(self, type_, name_, value_, line_, field_):
         self.type = type_
@@ -13,6 +8,7 @@ class Symbol:
         self.value = value_
         self.line = line_
         self.field = field_
+        self.parameters = []
 
     def get_type(self):
         return self.type
@@ -28,6 +24,9 @@ class Symbol:
 
     def get_field(self):
         return self.field
+
+    def get_parameters(self):
+        return self.parameters
 
     def set_value(self, _value):
         self.value = _value
