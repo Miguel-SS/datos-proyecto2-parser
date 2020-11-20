@@ -1,11 +1,12 @@
 
 from tokenizer import tokenizer
-from mini_parser import *
+from mini_parser import mini_parser
 
 print("Mini Interpreter\n")
 
-tokens = tokenizer("void function (int x, string c, int y) {")
-line_parser(tokens)
+
+# tokens = tokenizer("void function (int x, string c, int y) {")
+# line_parser(tokens)
 
 # tokens = tokenizer("int x = 40")
 # line_parser(tokens)
@@ -48,11 +49,11 @@ line_parser(tokens)
 # print(SymbolTable.symbols)
 
 
-# fic = open('miau.txt', "r")
-# lines = []
-#
-# for line in fic:
-#     lines.append(line)
-#
-#
+fic = open('correcto.txt', "r")
+lines = []
+
+for line in fic:
+    lines.append(tokenizer(line))
+mini_parser(lines)
+
 # print(lines)

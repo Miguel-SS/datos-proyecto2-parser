@@ -10,9 +10,10 @@ def tokenizer(string: str):
         (re.compile(r"^[+*/-]"), "operator"),  # operators
         (re.compile(r"^[()]"), "parentheses"),  # parentheses
         (re.compile(r"^[{}]"), "braces"),  # braces
-        (re.compile(r"^[!=]="), "equals"),  # equals
+        (re.compile(r"^[!=<>]=*"), "equals"),  # equals
         (re.compile(r"^="), "assignment"),  # assignment
-        (re.compile(r"^,"), "coma")  # coma
+        (re.compile(r"^,"), "coma"),  # coma
+        (re.compile(r"^[\n\s]*"), "empty")  # end line
     ]
 
     tokens = []
