@@ -1,5 +1,7 @@
 import re
 
+# Inspirado en:
+# https://www.youtube.com/watch?v=myhmAASX00M
 
 def tokenizer(string: str):
     token_rexes = [
