@@ -6,7 +6,7 @@ from mini_parser import mini_parser
 
 print("Mini Interpreter\n")
 
-fic = open('incorrecto.txt', "r")
+fic = open('correcto.txt', "r")
 lines = []
 
 for line in fic:
