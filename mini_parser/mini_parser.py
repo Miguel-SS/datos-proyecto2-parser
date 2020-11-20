@@ -1,44 +1,54 @@
 from .symbol_table import SymbolTable
 from .model.symbol import Symbol
 
-stack_flags = []
+scopes_stack = []
+errors_list = []
+# line_counter = 0
 
 
 def parse_declaration(tokens: list):
     name = tokens[1][0]
-    value = Symbol(tokens[0][0], name, None, 1, stack_flags[-1])
+    value = Symbol(tokens[0][0], name, None, 1, scopes_stack[-1])
     SymbolTable.add_symbol(name, value)
 
 
 def parse_assignment(tokens: list):
     name = tokens[0][0]
-    value = Symbol(tokens[2][1], name, tokens[2][0], 1, stack_flags[-1])
+    value = Symbol(tokens[2][1], name, tokens[2][0], 1, scopes_stack[-1])
     if SymbolTable.find_symbol(name).get_type() == value.get_type():
         SymbolTable.add_symbol(name, value)
     else:
-        print('Error linea x: "' + name + '" parametro incorrecto - se esperaba (' + value.get_type() + ')')
+        error = 'Error linea x: "' + name + '" parametro incorrecto - se esperaba (' + value.get_type() + ')'
+        errors_list.append(error)
+        # print('Error linea x: "' + name + '" parametro incorrecto - se esperaba (' + value.get_type() + ')')
 
 
 def parse_assign_declaration(tokens: list):
     name = tokens[1][0]
     val_symbol = SymbolTable.find_symbol(tokens[3][0])
     if val_symbol is not None:
-        value = Symbol(val_symbol.get_type(), name, val_symbol.get_value(), 1, stack_flags[-1])
+        value = Symbol(val_symbol.get_type(), name, val_symbol.get_value(), 1, scopes_stack[-1])
         if tokens[0][0] == value.get_type():
             SymbolTable.add_symbol(name, value)
         else:
-            print('Error linea x: Asignacion incorrecta ' + val_symbol.get_name() + ' (' + val_symbol.get_type() + ') a ' + name + ' (' + tokens[0][0] + ')')
+            error = 'Error linea x: Asignacion incorrecta ' + val_symbol.get_name() + ' (' + val_symbol.get_type() + \
+                    ') a ' + name + ' (' + tokens[0][0] + ')'
+            errors_list.append(error)
+            # print('Error linea x: Asignacion incorrecta ' + val_symbol.get_name() + ' (' + val_symbol.get_type() + ') a ' + name + ' (' + tokens[0][0] + ')')
     else:
-        value = Symbol(tokens[3][1], name, tokens[3][0], 1, stack_flags[-1])
+        value = Symbol(tokens[3][1], name, tokens[3][0], 1, scopes_stack[-1])
         if tokens[0][0] == value.get_type():
             SymbolTable.add_symbol(name, value)
         else:
-            print('Error linea x: Asignacion incorrecta ' + tokens[3][0] + ' (' + tokens[3][1] + ') a' + name + ' (' + tokens[0][0] + ')')
+            error = 'Error linea x: Asignacion incorrecta ' + tokens[3][0] + ' (' + tokens[3][1] + ') a' + name + ' (' \
+                    + tokens[0][0] + ')'
+            errors_list.append(error)
+            # print('Error linea x: Asignacion incorrecta ' + tokens[3][0] + ' (' + tokens[3][1] + ') a' + name + ' (' + tokens[0][0] + ')')
 
 
 def parse_function(tokens: list):
     i = 3
-    stack_flags.append('local_' + tokens[1][0])
+    scopes_stack.append('local_' + tokens[1][0])
     while tokens[i][0] != ')':
         token = [tokens[i], tokens[i+1]]
         parse_declaration(token)
@@ -58,18 +68,45 @@ def parse_return(tokens: list):
         if value.get_type() == val_function.get_type():
             val_function.set_value(value.get_value)
         else:
-            print('Valor de retorno (' + value.get_type() + ') no coincide con el valor de retorno de la funcion (' + val_function.get_type() + ')')
+            error = 'Valor de retorno (' + value.get_type() + ') no coincide con el valor de retorno de la funcion (' \
+                    + val_function.get_type() + ')'
+            errors_list.append(error)
+            # print('Valor de retorno (' + value.get_type() + ') no coincide con el valor de retorno de la funcion (' + val_function.get_type() + ')')
+
     elif (tokens[1][1] == 'string') or (tokens[1][1] == 'float') or (tokens[1][1] == 'int'):
-        val_function = SymbolTable.find_symbol(stack_flags[-1][6:])
+        val_function = SymbolTable.find_symbol(scopes_stack[-1][6:])
         if tokens[1][1] == val_function.get_type():
             val_function.set_value(tokens[1][0])
         else:
-            print('Valor de retorno (' + tokens[1][1] + ') no coincide con el valor de retorno de la funcion (' + val_function.get_type() + ')')
+            error = 'Valor de retorno (' + tokens[1][1] + ') no coincide con el valor de retorno de la funcion (' + \
+                    val_function.get_type() + ')'
+            errors_list.append(error)
+            # print('Valor de retorno (' + tokens[1][1] + ') no coincide con el valor de retorno de la funcion (' + val_function.get_type() + ')')
 
 
 def parse_conditional(tokens: list):
-    name_flag = stack_flags[-1][stack_flags[-1].find('_')+1:]
-    stack_flags.append('if_' + name_flag)
+    name_flag = scopes_stack[-1][scopes_stack[-1].find('_') + 1:]
+    scopes_stack.append('if_' + name_flag)
+    val_1 = None
+    val_2 = None
+    if tokens[2][1] == 'identifier':
+        val_1 = SymbolTable.find_symbol(tokens[2][0]).get_type()
+    elif (tokens[2][1] == 'float') or (tokens[2][1] == 'string') or (tokens[2][1] == 'int'):
+        val_1 = tokens[2][1]
+
+    if tokens[4][1] == 'identifier':
+        val_2 = SymbolTable.find_symbol(tokens[4][0]).get_type()
+    elif (tokens[4][1] == 'float') or (tokens[4][1] == 'string') or (tokens[4][1] == 'int'):
+        val_2 = tokens[4][1]
+
+    if val_1 != val_2:
+        error = 'Error en la linea x: Comparacion de (' + val_1 + ') con (' + val_2 + ')'
+        errors_list.append(error)
+        # print('Error en la linea x: Comparacion de (' + val_1 + ') con (' + val_2 + ')')
+    if tokens[3][1] != 'equals':
+        error = 'Error en la linea x: Signo incorrecto, no es de comparacion'
+        errors_list.append(error)
+        # print('Error en la linea x: Signo incorrecto, no es de comparacion')
 
 
 def call_function(tokens: list):
@@ -96,15 +133,21 @@ def line_parser(tokens: list):
             elif tokens[1][0] == '(':
                 call_function(tokens)
     elif tokens[0][0] == '}':
-        if stack_flags[-1] != 'global':
-            stack_flags.pop()
+        if scopes_stack[-1] != 'global':
+            scopes_stack.pop()
     else:
         print('ERROR')
 
 
 def mini_parser(lines: list):
-    stack_flags.append('global')
+    scopes_stack.append('global')
     for line in lines:
+        # line_counter = line_counter + 1
         if line[0][1] != 'empty':
             line_parser(line)
 
+    if len(errors_list) > 0:
+        for error in errors_list:
+            print(error)
+    else:
+        print('BUILD SUCCESS')
