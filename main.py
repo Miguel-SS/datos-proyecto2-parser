@@ -49,7 +49,7 @@ print("Mini Interpreter\n")
 # print(SymbolTable.symbols)
 
 
-fic = open('correcto.txt', "r")
+fic = open('incorrecto.txt', "r")
 lines = []
 
 for line in fic:

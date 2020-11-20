@@ -29,6 +29,9 @@ class Symbol:
     def get_field(self):
         return self.field
 
+    def set_value(self, _value):
+        self.value = _value
+
     def __str__(self):
         return self.type + "/" + self.name + "/" + str(self.value) + "/" + str(self.line) + "/" + self.field
 
